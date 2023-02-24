@@ -1,226 +1,179 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<!-- Best Practice nya kode php taro paling atas -->
 <?php
-$listAgama = [ "Kristen"," Hindu", "Islam", "Budha"];
-sort($listAgama); //mengurutkan array dari yang terkecil
-$listGolongan = [ "I", "II", "III"];
-
-$fileJson = 'data_karyawan.json';
-$dataKaryawan = array();
-
-// membaca file json
-$dataJson = file_get_contents($fileJson);
+// membuat array kosong untuk menampung data karyawan
+$dataKaryawan = [];
+// ambil data json
+$dataJson = file_get_contents('data_karyawan.json');
+// ubah json ke array untuk bisa di manipulasi data nya
 $dataKaryawan = json_decode($dataJson, true);
 
-if(isset($_GET['btnSave'])){
+// list agama
+$listAgama = ['Islam', 'Budha', 'Kristen', 'Katolik'];
+sort($listAgama);
+
+// list golongan
+$listGolongan = ['I', 'II', 'III'];
+
+// jika input save di tekan artinya udah di set input name btnSave nya dan data akan masuk ke url query parameter. lalu ambil semua data yang di url parameter nya berdasarkan name/key parameter kemudian masukan ke variabel 
+if (isset($_GET['btnSave'])) {
     $nik = $_GET['nik'];
     $nama = $_GET['nama'];
-    $jenisKelamin = $_GET['jeniskelamin'];
+    $jenisKelamin = $_GET['jenisKelamin'];
     $agama = $_GET['agama'];
     $golongan = $_GET['golongan'];
     $gajiPokok = $_GET['gajiPokok'];
 
-        // buat array asosiatif baru
-    $dataBaru = array(
-        "nik" => $nik,
-        "nama" => $nama,
-        "jenisKelamin" => $jenisKelamin,
-        "agama" => $agama,
-        "golongan" => $golongan,
-        "gajiPokok" => $gajiPokok,
-    );
-    // nambahin object baru ke data karyawan
-    array_push($dataKaryawan, $dataBaru);
-
-    // mengubah array ke json
-    $dataToJson = json_encode($dataKaryawan, JSON_PRETTY_PRINT);
-
-    file_put_contents($fileJson, $dataToJson);
+    // dari data yang sudah di masukan ke variabel lalu masukan ke array value nya
+    $dataArrayBaru = [
+        'nik' => $nik,
+        'nama' => $nama,
+        'jenisKelamin' => $jenisKelamin,
+        'agama' => $agama,
+        'golongan' => $golongan,
+        'gajiPokok' => $gajiPokok,
+    ];
+    // menambah array baru ke data karyawan
+    array_push($dataKaryawan, $dataArrayBaru);
+    // ubah dari array ke json
+    $dataJson = json_encode($dataKaryawan, JSON_PRETTY_PRINT);
+    // menulis dataJson ke file json
+    file_put_contents('data_karyawan.json', $dataJson);
 }
-
-
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORM KARYAWAN | VSGA</title>
+</head>
+
 <body>
-     <h1>Form Karyawan</h1>
-     <form action ="#" method="get">
-     <table>
-        <tr>
-            <td>NIK</td>
-            <td>:</td>
-            <td><input type="text" name="nik" id="NIK"></td>
-        </tr>
-        <tr>
-            <td>NAMA</td>
-            <td>:</td>
-            <td> <input type="text" name="nama" id="nama"></td>
-        </tr>
-        <tr>
-            <td>jenisKelamin</td>
-            <td>:</td>
-            <td><select name="jeniskelamin" id="JenisKelamin">
-                <option value="1">Laki Laki</option>
-                <option value="0">Perempuan</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>AGAMA</td>
-            <td>:</td>
-            <td>
-            <select name="agama" id="agama">
-                    <?php
-                        // cara ke 1
-                    // foreach ($listAgama as $agama){
-                    //     echo "<option value= '$agama'>$agama</option>";
-                    // }
-                    // cara ke 2
-                for ($index = 0; $index <count($listAgama); $index++){
-                    echo "<option value = '$listAgama[$index]'>$listAgama[$index]</option>";
-                }
+    <form action="#" method="get">
+        <table>
+            <tr>
+                <td>NIK</td>
+                <td>:</td>
+                <td>
+                    <input type="number" name="nik" id="nik">
+                </td>
+            </tr>
+            <tr>
+                <td>NAMA</td>
+                <td>:</td>
+                <td>
+                    <input type="text" name="nama" id="nama">
+                </td>
+            </tr>
+            <tr>
+                <td>JENIS KELAMIN</td>
+                <td>:</td>
+                <td>
+                    <select name="jenisKelamin" id="jenisKelamin">
+                        <option value="1">Laki-Laki</option>
+                        <option value="0">Perempuan</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>AGAMA</td>
+                <td>:</td>
+                <td>
+                    <select name="agama" id="agama">
+                        <?php foreach ($listAgama as $agama) : ?>
+                        <option value="<?= $agama ?>"><?= $agama ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>GOLONGAN</td>
+                <td>:</td>
+                <td>
+                    <select name="golongan" id="golongan">
+                        <?php foreach ($listGolongan as $golongan) : ?>
+                        <option value="<?= $golongan ?>"><?= $golongan ?></option>
+                        <?php var_dump($golongan);
+                        endforeach ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>GAJI POKOK</td>
+                <td>:</td>
+                <td>
+                    <input type="number" name="gajiPokok" id="gajiPokok" value="0">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" align="center">
+                    <input style="margin-top: 10px;" type="submit" name="btnSave" value="Save"></input>
+                </td>
+            </tr>
+        </table>
+    </form>
 
+    <hr>
 
-                    ?>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>GOLONGAN</td>
-            <td>:</td>
-            <td>
-                <select name="golongan" id="golongan">
-                    <?php
-                    foreach($listGolongan as $golongan){
-                        echo "<option value='$golongan'>$golongan</option>";
-                    } ?>
-                </select>
-              
-            </td>
-        </tr>
-        <tr>
-            <td>GAJI POKOK</td>
-            <td>:</td>
-            <td> 
-                <input type="number" name= "gajiPokok" id="gajiPokok">
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3" align = "right">
-                <input type ="submit"value="save" name="btnSave" id="btnSave">
-            </td>
-            <td></td>
-            <td></td>
-        </tr>
-     </table>
-                </form>
-
-    
-        <hr> 
-        <table border ="1">
+    <table border="1">
+        <thead>
             <tr>
                 <th>NIK</th>
-                <th>Nama</th>
-                <th>JenisKelamin</th>
-                <th>golongan</th>
-                <th>Agama</th>
-                <th>Tunjangan</th>
-                <th>Pajak</th>
-                <th>Total gaji</th>
-            </tr>;
-            <?php 
-            foreach ($dataKaryawan as $Karyawan){
-                $tunjangan;
-                $pajak;
-                $totalGaji;
-                
-                // echo $Karyawan['nama'] . "<br>";
-                // echo $Karyawan['agama'] . "<br>";
-                // echo $Karyawan['nik'] . "<br>";
-                // echo $Karyawan['jenisKelamin']. "<br>";
+                <th>NAMA</th>
+                <th>JENIS KELAMIN</th>
+                <th>AGAMA</th>
+                <th>GOLONGAN</th>
+                <th>GAJI POKOK</th>
+                <th>TUNJANGAN</th>
+                <th>PAJAK</th>
+                <th>TOTAL GAJI BERSIH</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
 
-            }
-                
-                ?>
-                <tr>
-                    
-                    <td> <?php
-                     echo $Karyawan['nik']; ?></td>
-                    <td>
-                    <?php
-                     echo $Karyawan['nama']; ?>
-                    </td>
-                    <td>
-                    <?php
-                     $kelamin = $Karyawan['jenisKelamin'];
-                     if ($kelamin > 0){
-                        echo "Laki Laki";
-                     } else {
-                        echo "Perempuan";
-                     }
-                     ?>
-                    </td>
-                    <td>
-                    <?php 
-                    
-                    echo $Karyawan ['golongan'];
-                   
-                    
-                    ?>
-                    </td>
-                    <td>
-                   <?php
-                     echo $Karyawan['agama']; ?>
-                
-                    </td>
-                    <td>
-                        <?php 
-                     if ($Karyawan['golongan'] = "I"){
-                        $tunjangan = 1000000;
-                        echo $tunjangan;
-                     } else if ($Karyawan['golongan'] = "II"){
-                        $tunjangan = 2000000;
-                        echo $tunjangan;
-                     } else if ($Karyawan['golongan'] = "III"){
-                        $tunjangan = 3000000;
-                        echo $tunjangan;
-                     } else{
-                        echo "tidak mendapat Tunjangan"
-                     };
+            foreach ($dataKaryawan as $karyawan) : ?>
+            <tr>
+                <td> <?= $karyawan['nik'] ?> </td>
+                <td><?= $karyawan['nama'] ?></td>
+                <td><?= $karyawan['jenisKelamin'] ?></td>
+                <td><?= $karyawan['agama'] ?></td>
+                <td><?= $karyawan['golongan'] ?></td>
+                <td><?= $karyawan['gajiPokok'] ?></td>
+                <td>
+                    <?php if ($karyawan['golongan'] == "I") {
+                            $tunjangan = 1000000;
+                            echo $tunjangan;
+                        } else if ($karyawan['golongan'] == "II") {
+                            $tunjangan = 2000000;
+                            echo $tunjangan;
+                        } else if ($karyawan['golongan'] == "III") {
+                            $tunjangan = 3000000;
+                            echo $tunjangan;
+                        } else {
+                            echo "Maaf, anda tidak mendapat tunjangan";
+                        }
                         ?>
-                    </td>
-                    <td>
-                        <?php 
-                        $gaji = $Karyawan ['gajiPokok'];
-                        $pj =  $gaji + $tunjangan;
-                        $pajak =$pj * 0.05;
-                        echo $pajak ;
-                        ?>
-                    </td>
-                    <td>
-                    <?php 
-                    $totalGaji = $Karyawan [ 'gajiPokok' ] + $tunjangan;
-                    $gaji = $totalGaji - $ppn;
-                    echo "RP. $gaji";
-                    ?>        
                 </td>
-                    
-                </tr>
-                </table>
-                
+                <td>
+                    <?php
+                        $pajak = ($karyawan['gajiPokok'] + $tunjangan) * 0.05;
+                        echo $pajak;
+                        ?>
+                </td>
+                <td>
+                    <?php
+                        $totalGaji = $karyawan['gajiPokok'] + $tunjangan - $pajak;
+                        echo $totalGaji;
+                        ?>
+                </td>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
 </body>
-</html> 
 
-<!-- perulangan
-//1. conditonal looping
-    While do , do while
-  2. unconditional looping(perulangan pasti)
-  for
-
-
-
--->
+</html>
