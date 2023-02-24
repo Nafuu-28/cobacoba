@@ -1,10 +1,26 @@
 [
     {
-        "nik": "2012010",
-        "nama": "asa",
-        "jenisKelamin": "1",
-        "agama": " Hindu",
+        "nik": "111111",
+        "nama": "LOREM",
+        "jenisKelamin": "0",
+        "agama": "Kristen",
         "golongan": "I",
-        "gajiPokok": "200000"
+        "gajiPokok": "10000"
+    },
+    {
+        "nik": "222222",
+        "nama": "Dewi",
+        "jenisKelamin": "0",
+        "agama": "Islam",
+        "golongan": "II",
+        "gajiPokok": "20000"
+    },
+    {
+        "nik": "333333",
+        "nama": "Ariq",
+        "jenisKelamin": "1",
+        "agama": "Budha",
+        "golongan": "III",
+        "gajiPokok": "30000"
     }
 ]
